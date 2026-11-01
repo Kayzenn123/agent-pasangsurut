@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PASANGSURUT — Papan Pasang Surut 12 Pelabuhan Indonesia</title>
+<meta name="description" content="Papan pasang surut brutalisme beton: kurva harmonik harian, fase bulan, dan jam melaut untuk 12 pelabuhan Indonesia.">
+<meta name="theme-color" content="#a8d5b0">
+<link rel="canonical" href="https://kayzenn123.github.io/agent-pasangsurut/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PASANGSURUT — Papan Pasang Surut Pelabuhan">
+<meta property="og:description" content="Kapan pasang purnama? Kapan surut terendah? Satu tiang ukur beton menjawabnya.">
+<meta property="og:image" content="https://kayzenn123.github.io/agent-pasangsurut/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23a8d5b0'/%3E%3Crect x='26' y='6' width='12' height='52' fill='%231a2b22'/%3E%3Cg stroke='%23a8d5b0' stroke-width='3'%3E%3Cpath d='M26 16h12M26 28h12M26 40h12'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preload" href="fonts/beiruti-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/noto-sans-thai-looped-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Lompat ke konten</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="beton"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/><feDiffuseLighting in="n" lighting-color="#ffffff" surfaceScale="1.6" result="l"><feDistantLight azimuth="235" elevation="55"/></feDiffuseLighting><feComposite in="l" in2="SourceGraphic" operator="arithmetic" k1="0.12" k2="0.88" k3="0" k4="0"/></filter>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <p class="brand">PASANG<span>SURUT</span></p>
+  <div class="topbar-actions">
+    <button id="btnMotion" type="button" aria-pressed="true">Gerak: Nyala</button>
+    <button id="btnMarquee" type="button" aria-pressed="true">Marquee: Jalan</button>
+  </div>
+</header>
+
+<div class="ringwrap" aria-hidden="true">
+  <svg class="ring ring-a" viewBox="0 0 200 200">
+    <defs><path id="circA" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
+    <text><textPath href="#circA">PASANG • SURUT • PASANG • SURUT •&#160;</textPath></text>
+  </svg>
+  <svg class="ring ring-b" viewBox="0 0 200 200">
+    <defs><path id="circB" d="M100,100 m-58,0 a58,58 0 1,0 116,0 a58,58 0 1,0 -116,0"/></defs>
+    <text><textPath href="#circB">12 PELABUHAN • JAM MELAUT •&#160;</textPath></text>
+  </svg>
+</div>
+
+<main id="main">
+  <section class="hero fly" aria-labelledby="h1">
+    <p class="eyebrow">Papan pasang surut · 12 pelabuhan Indonesia</p>
+    <h1 id="h1" class="giant">PASANG<br>SURUT</h1>
+    <p class="nowline"><span id="nowClock" class="scramble" data-scramble>--:--</span> WIB · <span id="nowPort">TANJUNG PRIOK</span></p>
+    <p class="lede">Satu tiang ukur beton. Pilih pelabuhan, pilih tanggal — air naik atau turun, terbaca dalam sekali lihat.</p>
+    <form id="pickForm" class="pickbar" autocomplete="off">
+      <label class="field">Pelabuhan
+        <select id="portSelect" name="pelabuhan"></select>
+      </label>
+      <label class="field">Tanggal
+        <input id="dateInput" name="tanggal" type="date" required>
+      </label>
+      <button class="btn" type="submit">HITUNG PASANG</button>
+    </form>
+    <p class="stamp">CONTOH · MODEL EDUKASI</p>
+  </section>
+
+  <section class="axis-section fly" id="kurva" aria-labelledby="hKurva">
+    <div class="axis" aria-hidden="true"></div>
+    <div class="card">
+      <p class="eyebrow">Tiang ukur · <span id="curvePortName">Tanjung Priok</span> · <span id="curveDate">—</span></p>
+      <h2 id="hKurva" class="giant small-giant">KURVA<br>HARI INI</h2>
+      <canvas id="tideCanvas" width="1200" height="520" role="img" aria-label="Grafik kurva pasang surut hari yang dipilih"></canvas>
+      <ul id="eventList" class="events"></ul>
+      <div id="eventDetail" class="detail" hidden></div>
+      <div class="row">
+        <button class="btn" id="btnCopy" type="button">SALIN RINGKASAN WA</button>
+        <button class="btn ghost" id="btnCSV" type="button">UNDUH CSV</button>
+        <button class="btn ghost" id="btnJSON" type="button">UNDUH JSON</button>
+      </div>
+      <p class="note">Kurva dihitung mesin harmonik (M2 · S2 · K1 · O1) dari pola umum tiap wilayah — <strong>model edukasi, bukan untuk navigasi</strong>. Periode konstituen: tabel standar (Pond &amp; Pickard). Jam peristiwa = waktu setempat pelabuhan.</p>
+    </div>
+  </section>
+
+  <section class="axis-section fly" id="pelabuhan" aria-labelledby="hPelabuhan">
+    <div class="axis" aria-hidden="true"></div>
+    <div class="card">
+      <p class="eyebrow">12 titik di peta</p>
+      <h2 id="hPelabuhan" class="giant small-giant">PELABUHAN</h2>
+      <label class="field search">Cari <input id="portSearch" type="search" placeholder="cth: makassar" aria-label="Cari pelabuhan"></label>
+      <ul id="portGrid" class="portgrid"></ul>
+    </div>
+  </section>
+
+  <section class="axis-section fly" id="bulan" aria-labelledby="hBulan">
+    <div class="axis" aria-hidden="true"></div>
+    <div class="card">
+      <p class="eyebrow">Penentu pasang besar</p>
+      <h2 id="hBulan" class="giant small-giant">BULAN &amp;<br>MELAUT</h2>
+      <div class="moonrow">
+        <canvas id="moonCanvas" width="360" height="360" role="img" aria-label="Gambar fase bulan"></canvas>
+        <div>
+          <p class="moonname scramble" id="moonName" data-scramble>—</p>
+          <p>Umur bulan <strong id="moonAge">—</strong> hari · terang <strong id="moonIllum">—</strong>%</p>
+          <p id="springNote" class="note"></p>
+        </div>
+      </div>
+      <h3 class="subhead">JAM MELAUT — KATA PAK JAGA DERMAGA</h3>
+      <ul id="fishList" class="fish"></ul>
+      <p class="note">Panduan umum dari model edukasi. Selalu cek info resmi pelabuhan sebelum berlayar.</p>
+    </div>
+  </section>
+
+  <section class="axis-section fly" id="glosarium" aria-labelledby="hGlosarium">
+    <div class="axis" aria-hidden="true"></div>
+    <div class="card">
+      <p class="eyebrow">Biar ngobrol sama nelayan nyambung</p>
+      <h2 id="hGlosarium" class="giant small-giant">KAMUS<br>DERMAGA</h2>
+      <dl id="glossList" class="gloss"></dl>
+    </div>
+  </section>
+
+  <section class="axis-section fly rob" id="robSlab" aria-labelledby="hRob" hidden>
+    <div class="axis" aria-hidden="true"></div>
+    <div class="card danger">
+      <p class="eyebrow">Slab tersembunyi · kamu mengetik ROB</p>
+      <h2 id="hRob" class="giant small-giant">WASPADA<br>ROB</h2>
+      <p>Rob datang saat pasang purnama bertemu bulan purnama/baru — air naik melewati tanggul. Kalau kurva hari ini menembus garis merah, jangan parkir perahu di kolong dermaga.</p>
+      <p class="note">Easter egg terbuka. Tetap pantau peringatan resmi BMKG untuk banjir pesisir.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p class="giant foot-giant">JANGAN<br>MELAUT<br>BUTA.</p>
+  <p>Metode: sintesis harmonik 4 konstituen (M2 12,4206 j · S2 12,0 j · K1 23,9344 j · O1 25,8194 j). Amplitudo = pola umum wilayah (estimasi edukasi). Fase bulan = algoritma astronomi (sinodik 29,53059 hari).</p>
+  <p>Sumber metode: Kusuma et al., JAGI Vol 5 No 2 (2021) — analisis harmonik Teluk Jakarta; tabel konstituen standar (Pond &amp; Pickard).</p>
+  <p>© 2026 PASANGSURUT · Hari 23 · 30 Days of Code · Ikon digambar sendiri mengikuti gaya stiker Streamline · Font: Beiruti, Noto Sans Thai Looped, Risque (OFL).</p>
+</footer>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

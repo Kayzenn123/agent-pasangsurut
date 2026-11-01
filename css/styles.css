@@ -1,0 +1,213 @@
+/* PASANGSURUT — brutalisme beton, 2 ukuran font saja */
+@layer tokens, base, layout, components, motion;
+
+@layer tokens {
+  :root {
+    --bg: oklch(0.72 0.105 153);
+    --surface: oklch(0.60 0.100 153);
+    --surface-2: oklch(0.54 0.095 153);
+    --text: oklch(0.16 0.030 153);
+    --muted: oklch(0.30 0.045 153);
+    --accent: oklch(0.55 0.170 183);
+    --accent-ink: oklch(0.22 0.060 183);
+    --accent-2: oklch(0.70 0.200 123);
+    --pop: oklch(0.52 0.200 25);
+    --pop-ink: oklch(0.96 0.015 25);
+    --line: 3px solid var(--text);
+    /* constraint seed: SATU ukuran biasa + SATU ukuran raksasa */
+    --fs: 1.125rem;
+    --fs-giant: clamp(4rem, 17vw, 12rem);
+    --pad: clamp(1rem, 4vw, 3rem);
+    color-scheme: light;
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: "Beiruti"; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url("../fonts/beiruti-latin-wght-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Noto Sans Thai Looped"; font-style: normal; font-weight: 100 900; font-display: swap;
+    src: url("../fonts/noto-sans-thai-looped-latin-wght-normal.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Risque"; font-style: normal; font-weight: 400; font-display: swap;
+    src: url("../fonts/risque-latin-400-normal.woff2") format("woff2");
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  html.no-motion { scroll-behavior: auto; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Noto Sans Thai Looped", system-ui, sans-serif;
+    font-size: var(--fs); line-height: 1.55;
+    overflow-x: clip;
+    min-height: 100dvh;
+  }
+  /* tekstur beton global */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: .28;
+    filter: url(#beton);
+  }
+  h1, h2, h3, p, ul, dl, dd, figure { margin: 0; }
+  ul { padding: 0; list-style: none; }
+  .giant {
+    font-family: "Beiruti", serif; font-weight: 800; font-size: var(--fs-giant);
+    line-height: .92; letter-spacing: -.01em; text-transform: uppercase;
+  }
+  .small-giant { font-size: clamp(3rem, 12vw, 8rem); }
+  .foot-giant { font-size: clamp(3rem, 14vw, 10rem); }
+  .eyebrow {
+    font-family: "Risque", cursive; font-size: var(--fs); text-transform: uppercase;
+    letter-spacing: .14em;
+  }
+  ::selection { background: var(--text); color: var(--bg); }
+  :focus-visible { outline: 4px solid var(--pop); outline-offset: 2px; }
+  .skip {
+    position: absolute; left: 1rem; top: -4rem; z-index: 99; background: var(--text); color: var(--bg);
+    padding: .75rem 1rem; font-size: var(--fs); transition: top .15s;
+  }
+  .skip:focus { top: 1rem; }
+  button, select, input { font-size: var(--fs); font-family: inherit; }
+}
+
+@layer layout {
+  .topbar {
+    position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem; padding: .75rem var(--pad); background: var(--text); color: var(--bg);
+    border-bottom: var(--line);
+  }
+  .brand { font-family: "Beiruti", serif; font-weight: 800; font-size: var(--fs); letter-spacing: .06em; }
+  .brand span { color: var(--accent-2); }
+  .topbar-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .topbar-actions button {
+    background: transparent; color: var(--bg); border: 2px solid var(--bg);
+    padding: .5rem .75rem; min-height: 44px; cursor: pointer;
+  }
+  .topbar-actions button[aria-pressed="false"] { opacity: .55; }
+
+  main { position: relative; z-index: 1; }
+  section { padding: calc(var(--pad) * 1.5) var(--pad); position: relative; }
+  .hero { min-height: 92dvh; display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; border-bottom: var(--line); }
+  .nowline { font-size: var(--fs); font-weight: 700; }
+  .lede { max-width: 34rem; }
+
+  .axis-section { position: relative; }
+  .axis {
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 6px; transform: translateX(-50%);
+    background: repeating-linear-gradient(to bottom, var(--text) 0 18px, transparent 18px 30px);
+    opacity: .35;
+  }
+  .card {
+    position: relative; background: var(--surface); border: var(--line);
+    box-shadow: 8px 8px 0 var(--text); padding: var(--pad); max-width: 72rem; margin-inline: auto;
+    display: flex; flex-direction: column; gap: 1.25rem;
+  }
+  .card.danger { background: var(--pop); color: var(--pop-ink); border-color: var(--pop-ink); box-shadow: 8px 8px 0 var(--pop-ink); }
+  .card.danger .eyebrow, .card.danger .note { color: var(--pop-ink); }
+
+  footer { border-top: var(--line); padding: calc(var(--pad)*1.5) var(--pad); display: flex; flex-direction: column; gap: 1rem; background: var(--surface-2); }
+  footer p { max-width: 60rem; }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    background: var(--text); color: var(--bg); border: var(--line);
+    padding: .8rem 1.25rem; min-height: 48px; cursor: pointer; font-weight: 700;
+    box-shadow: 5px 5px 0 color-mix(in oklch, var(--text) 55%, transparent);
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .btn:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 color-mix(in oklch, var(--text) 55%, transparent); }
+  .btn.ghost { background: transparent; color: var(--text); }
+  .row { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+  .pickbar { display: flex; gap: 1rem; flex-wrap: wrap; align-items: end; }
+  .field { display: flex; flex-direction: column; gap: .35rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .field select, .field input {
+    background: var(--bg); color: var(--text); border: var(--line); padding: .7rem .9rem; min-height: 48px; min-width: min(16rem, 70vw);
+  }
+  .field.search input { min-width: min(22rem, 80vw); }
+
+  .stamp {
+    font-family: "Risque", cursive; font-size: var(--fs); color: var(--pop-ink); background: var(--pop);
+    display: inline-block; padding: .4rem .9rem; border: var(--line); transform: rotate(-3deg); align-self: flex-start;
+  }
+  .note { color: var(--muted); max-width: 44rem; }
+  .card.danger .note { color: var(--pop-ink); }
+
+  #tideCanvas { width: 100%; height: auto; border: var(--line); background: var(--bg); display: block; }
+  .events { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .events button {
+    background: var(--bg); border: var(--line); padding: .9rem; min-height: 48px; cursor: pointer; text-align: left;
+    box-shadow: 4px 4px 0 var(--text); display: flex; flex-direction: column; gap: .2rem;
+  }
+  .events .etime { font-family: "Beiruti", serif; font-weight: 800; font-size: var(--fs); }
+  .events .elabel { text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+  .events .eh { color: var(--muted); }
+  .detail { border: var(--line); background: var(--bg); padding: 1rem; }
+
+  .portgrid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .portcard {
+    background: var(--bg); border: var(--line); box-shadow: 5px 5px 0 var(--text);
+    padding: 1rem; display: flex; flex-direction: column; gap: .5rem;
+    transform-style: preserve-3d; will-change: transform;
+  }
+  .portcard h3 { font-family: "Beiruti", serif; font-size: var(--fs); text-transform: uppercase; }
+  .portcard .coords { color: var(--muted); }
+  .portcard .ptype { font-family: "Risque", cursive; text-transform: uppercase; letter-spacing: .1em; }
+  .portcard button {
+    margin-top: .25rem; min-height: 48px; cursor: pointer; font-weight: 700;
+    background: var(--text); color: var(--bg); border: var(--line);
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+
+  .moonrow { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+  #moonCanvas { border: var(--line); background: var(--text); width: min(16rem, 70vw); height: auto; }
+  .moonname { font-family: "Beiruti", serif; font-weight: 800; font-size: var(--fs); text-transform: uppercase; }
+  .subhead { font-family: "Beiruti", serif; font-size: var(--fs); text-transform: uppercase; letter-spacing: .05em; border-bottom: var(--line); padding-bottom: .5rem; }
+  .fish { display: flex; flex-direction: column; gap: .75rem; }
+  .fish li { border-left: 6px solid var(--accent); padding-left: 1rem; }
+
+  .gloss { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .gloss > div { border: var(--line); background: var(--bg); padding: 1rem; }
+  .gloss dt { font-family: "Beiruti", serif; font-weight: 800; text-transform: uppercase; }
+  .gloss dd { margin: .35rem 0 0; color: var(--muted); }
+  .card .gloss dd { color: var(--muted); }
+
+  /* stiker outline putih */
+  .sticker {
+    display: inline-flex; align-items: center; gap: .5rem;
+    border: 3px solid #fff; outline: 3px solid var(--text); background: var(--text); color: #fff;
+    padding: .35rem .7rem; font-size: var(--fs);
+  }
+  .sticker svg { width: 1.5rem; height: 1.5rem; flex: none; }
+
+  /* ring marquee melingkar */
+  .ringwrap {
+    position: fixed; right: max(.5rem, env(safe-area-inset-right)); top: 50%; translate: 0 -50%;
+    z-index: 30; width: clamp(7rem, 18vw, 11rem); aspect-ratio: 1; pointer-events: none; opacity: .92;
+  }
+  .ring { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .ring-b { inset: 20%; }
+  .ring text { font-size: var(--fs); font-family: "Noto Sans Thai Looped", sans-serif; font-weight: 700; fill: var(--text); letter-spacing: .12em; }
+  .ring-b text { fill: var(--accent-ink); }
+
+  @media (max-width: 40rem) {
+    .topbar { flex-direction: column; align-items: stretch; }
+    .topbar-actions { display: grid; grid-template-columns: 1fr 1fr; }
+    .ringwrap { width: 5.5rem; opacity: .3; }
+  }
+  @media (pointer: coarse) {
+    .ringwrap { display: none; }
+  }
+}
+
+@layer motion {
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+  html.no-motion .ringwrap { display: none; }
+}
